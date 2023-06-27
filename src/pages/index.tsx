@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import Head from 'next/head';
 import axios from 'axios';
 import styles from '@/styles/Home.module.css';
-import Image from 'next/image';
+
+const UserCard = lazy(() => import('./UserCard'));
 
 interface User {
   id: number;
@@ -62,29 +63,20 @@ const Home = () => {
       </Head>
       <h1 className={styles.title}>User List</h1>
       <div className={styles.userGrid}>
-        {users.map((user) => (
-          <div key={user.id} className={styles.userCard}>
-            <Image
-              width={60}
-              height={60}
-              src={user.avatar}
-              alt={`Avatar of ${user.first_name} ${user.last_name}`}
-              className={styles.userAvatar}
-            />
-            <div className={styles.userDetails}>
-              <p className={styles.userID}>{user.id}</p>
-              <p className={styles.userEmail}>{user.email}</p>
-              <p className={styles.userName}>
-                {user.first_name} {user.last_name}
-              </p>
-            </div>
-          </div>
-        ))}
+        <Suspense>
+          {users.map((user) => (
+            <UserCard key={user.id} user={user} />
+          ))}
+        </Suspense>
       </div>
 
       <button
         onClick={handleLoadMore}
-        className={styles.loadMoreButton}
+        className={
+          currentPage < totalPages && !isLoading
+            ? styles.loadMoreButton
+            : styles.loadDisabledButton
+        }
         disabled={isLoading}
       >
         {isLoading ? 'Loading...' : 'Load more'}

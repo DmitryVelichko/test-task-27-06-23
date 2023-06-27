@@ -1,0 +1,36 @@
+.userCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.userAvatar {
+  width: 100%;
+  border-radius: 4px;
+  height: 60px;
+  width: 60px;
+  border-radius: 50px;
+}
+
+.userDetails {
+  margin-top: 10px;
+}
+
+.userID,
+.userEmail,
+.userName {
+  margin: 8px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userID {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
