@@ -11,6 +11,10 @@ interface User {
 }
 
 const UserCard: FC<{ user: User }> = ({ user }) => {
+  if (!user) {
+  
+    return <div>Loading user data...</div>;
+  }
   return (
     <div className={styles.userCard}>
       <Image
@@ -20,6 +24,7 @@ const UserCard: FC<{ user: User }> = ({ user }) => {
         alt={`Avatar of ${user.first_name} ${user.last_name}`}
         className={styles.userAvatar}
       />
+
       <div className={styles.userDetails}>
         <p className={styles.userID}>{user.id}</p>
         <p className={styles.userEmail}>{user.email}</p>
