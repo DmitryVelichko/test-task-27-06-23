@@ -39,3 +39,17 @@
   padding: 8px 16px;
   cursor: pointer;
 }
+
+/* Medium screen responsiveness */
+@media (max-width: 768px) {
+  .userGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Small screen responsiveness */
+@media (max-width: 480px) {
+  .userGrid {
+    grid-template-columns: 1fr;
+  }
+}

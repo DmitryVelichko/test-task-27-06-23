@@ -14,6 +14,7 @@
   height: 60px;
   width: 60px;
   border-radius: 50px;
+  object-fit: cover;
 }
 
 .userDetails {
@@ -33,4 +34,40 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Medium screen responsiveness */
+@media (max-width: 768px) {
+  .userCard {
+    padding: 1.5rem;
+  }
+
+  .userAvatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .userID,
+  .userEmail,
+  .userName {
+    font-size: 1rem;
+  }
+}
+
+/* Small screen responsiveness */
+@media (max-width: 480px) {
+  .userCard {
+    padding: 2rem;
+  }
+
+  .userAvatar {
+    width: 90px;
+    height: 90px;
+  }
+
+  .userID,
+  .userEmail,
+  .userName {
+    font-size: 1.5rem;
+  }
 }

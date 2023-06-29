@@ -85,4 +85,24 @@ const Home = () => {
   );
 };
 
+export async function getStaticProps() {
+  try {
+    const response = await axios.get<APIResponse>(`${API_URL}?page=1`);
+    const { data } = response.data;
+    const initialUsers = data.slice(0, 10);
+    return {
+      props: {
+        initialUsers,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching initial users:', error);
+    return {
+      props: {
+        initialUsers: [],
+      },
+    };
+  }
+}
+
 export default Home;
