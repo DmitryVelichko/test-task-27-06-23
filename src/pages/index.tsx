@@ -3,7 +3,7 @@ import Head from 'next/head';
 import axios from 'axios';
 import styles from '@/styles/Home.module.css';
 
-const UserCard = lazy(() => import('./UserCard'));
+const UserCard = lazy(() => import('../UserCard'));
 
 interface User {
   id: number;
@@ -20,40 +20,30 @@ interface APIResponse {
 
 const API_URL = 'https://reqres.in/api/users';
 
-const Home = () => {
-  const [users, setUsers] = useState<User[]>([]);
+const Home = ({ initialUsers, total_pages }) => {
+  const [users, setUsers] = useState<User[]>([...initialUsers]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(total_pages);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const fetchUsers = async (page: number) => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get<APIResponse>(`${API_URL}?page=${page}`);
-      const { data, total_pages } = response.data;
-      setUsers((prevUsers) => [...prevUsers, ...data]);
-      setTotalPages(total_pages);
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      setIsLoading(false);
-    }
-  };
 
   const handleLoadMore = async () => {
     if (currentPage < totalPages && !isLoading) {
-      window.requestIdleCallback(async () => {
+      try {
         setCurrentPage((prevPage) => prevPage + 1);
-      });
+        setIsLoading(true);
+        const response = await axios.get<APIResponse>(
+          `${API_URL}?page=${currentPage + 1}`
+        );
+        const { data, total_pages } = response.data;
+        setUsers((prevUsers) => [...prevUsers, ...data]);
+        setTotalPages(total_pages);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        setIsLoading(false);
+      }
     }
   };
-
-  useEffect(() => {
-    const loadUsers = async () => {
-      await fetchUsers(currentPage);
-    };
-    loadUsers();
-  }, [currentPage]);
 
   return (
     <main className={styles.container}>
@@ -88,11 +78,12 @@ const Home = () => {
 export async function getStaticProps() {
   try {
     const response = await axios.get<APIResponse>(`${API_URL}?page=1`);
-    const { data } = response.data;
-    const initialUsers = data.slice(0, 10);
+    const { data, total_pages } = response.data;
+    const initialUsers = data.slice(0, 6);
     return {
       props: {
         initialUsers,
+        total_pages,
       },
     };
   } catch (error) {
